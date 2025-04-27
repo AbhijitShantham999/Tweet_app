@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="/css/styles.css" />
+    <link
+      href="https://cdn.jsdelivr.net/npm/remixicon@4.5.0/fonts/remixicon.css"
+      rel="stylesheet"
+    />
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <title>Tweet</title>
+  </head>
+  <body>
+    <div class="main w-full h-full bg-zinc-900">
+      <div
+        class="regis_ctn w-full-screen text-white h-full-screen flex flex-col gap-12 items-center justify-center p-10"
+      >
+        <h1 class="text-2xl text-center bold">Create a Account</h1>
+        <form
+          class="flex flex-col gap-5 items-center justify-center"
+          action="/register"
+          method="post"
+        >
+          <input
+            class="p-3 rounded-md outline-none bg-zinc-800 w-72"
+            type="text"
+            placeholder="Name"
+            name="name"
+          />
+          <input
+            class="p-3 rounded-md outline-none bg-zinc-800 w-72"
+            type="text"
+            placeholder="Username"
+            name="username"
+          />
+          <input
+            class="p-3 rounded-md outline-none bg-zinc-800 w-72"
+            type="email"
+            placeholder="Email"
+            name="email"
+          />
+          <input
+            class="p-3 rounded-md outline-none bg-zinc-800 w-72"
+            type="password"
+            placeholder="Password"
+            name="password"
+          />
+          <input
+            class="p-3 rounded-md outline-none bg-zinc-800 w-72"
+            type="text"
+            placeholder="Age"
+            name="age"
+          />
+
+          <% if (errors && errors.length > 0) { %> <% errors.forEach((err) => {
+          %>
+          <p class="flash-error text-red-500"><%= err %></p>
+          <% }) %> <% } %>
+
+          <input
+            class="px-4 py-3 rounded-md bg-orange-500"
+            type="submit"
+            value="Register"
+          />
+        </form>
+        <div class="already-login flex gap-3 items-center">
+          <h3>Already have an Account ?</h3>
+          <button class="bg-blue-600 px-4 py-2 rounded-lg">
+            <a href="/login">Login <i class="ri-arrow-right-line"></i></a>
+          </button>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
