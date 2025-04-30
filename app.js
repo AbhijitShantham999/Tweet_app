@@ -38,33 +38,37 @@ app.get("/", (req, res) => {
 });
 
 app.post("/register", async (req, res) => {
-  let { name, username, email, password, age } = req.body;
+  try {
+    await connectToMongoDB(); // ⬅️ Ensure DB is connected
+    const { name, username, email, password, age } = req.body;
 
-  let user = await userModel.findOne({ email });
-  if (!user) {
-    bcrypt.genSalt(10, (err, salt) => {
-      bcrypt.hash(password, salt, async (err, hash) => {
-        const createdUser = await userModel.create({
-          name,
-          username,
-          email,
-          password: hash,
-          age,
-          post,
-        });
-        const token = jwt.sign(
-          { email: email, userid: createdUser._id },
-          process.env.JWT_SECRET_KEY
-        );
-        res.cookie("token", token);
-        res.redirect("/profile");
+    const user = await userModel.findOne({ email });
+    if (!user) {
+      const hash = await bcrypt.hash(password, 10);
+      const createdUser = await userModel.create({
+        name,
+        username,
+        email,
+        password: hash,
+        age,
+        post,
       });
-    });
-  } else {
-    req.flash("errors", "User Already Registered, Please Login");
-    return res.redirect("/");
+      const token = jwt.sign(
+        { email, userid: createdUser._id },
+        process.env.JWT_SECRET_KEY
+      );
+      res.cookie("token", token);
+      return res.redirect("/profile");
+    } else {
+      req.flash("errors", "User Already Registered, Please Login");
+      return res.redirect("/");
+    }
+  } catch (err) {
+    console.error("Register Error:", err.message);
+    return res.status(500).send("Internal Server Error");
   }
 });
+
 
 app.get("/logout", (req, res) => {
   res.cookie("token", "");
